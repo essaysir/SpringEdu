@@ -1,0 +1,23 @@
+<< 아래의 순서대로 하세요 >>
+
+1. 팀장 -> 스프링 프로젝트를 생성한 후  
+              gitignore 파일은 수정하지 말고 
+              @controller 클래스 파일과 
+              @service 클래스 파일과 
+              @repository 클래스 파일(DAO)과
+              mapper 파일(.xml) 을 생성한 후  
+              git hub 에 PUSH 한다.
+
+2. 팀장 -> gitignore 파일을 열어서 gitignore.io 사이트에서 java eclipse 에 해당하는 내용을 추가한다.
+               이어서 생성한 스프링 프로젝트이름이 FinalProject 이라면   
+               /FinalProject/target/
+               을 입력해서 추가해준다. git hub 에 PUSH 한다.
+
+3. 팀장 ->  추가한 이미지 01.png 부터 07.png 을 보고서 그대로 따라 해준다.
+                참조 사이트 :  https://rwd337.tistory.com/179
+
+4. 팀원 -> STS에서 git 에서 import 를 해준다. 
+
+5. 팀원 -> 추가한 이미지 01.png 부터 07.png 을 보고서 그대로 따라 해준다. 
+
+ 

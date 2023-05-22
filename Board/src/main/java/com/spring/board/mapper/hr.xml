@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ==== #29. mapper 기본설정 ==== -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- ==== #29. 루트 엘리먼트 & 네임스페이스 설정(프로젝트 전체내에서 유일해야 한다.) ==== -->
+<mapper namespace="hr">
+			<!--  ; ( 세미 콜론 찍으면 안된다. )-->
+			<insert id="test_insert">
+				insert into spring_exam ( no , name , writeday , addr)
+				values( 101, '엄정화' , default , '서울시 마포구' )
+			</insert>
+			
+</mapper>

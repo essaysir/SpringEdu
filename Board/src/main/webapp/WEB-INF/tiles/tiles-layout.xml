@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ======= #23. tiles 레이아웃 설정하기 ======= -->
+
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+       
+<tiles-definitions>
+
+   <!-- ==== tiles 를 사용하는 레이아웃(header,content,footer) 설정 시작 ==== -->
+   <definition name="layout-tiles1"  template="/WEB-INF/tiles/layout/layout-tiles1.jsp"> 
+      <put-attribute name="header"  value="/WEB-INF/tiles/tile1/header.jsp" />
+      <put-attribute name="content" value="" />
+      <put-attribute name="footer"  value="/WEB-INF/tiles/tile1/footer.jsp" />
+   </definition>
+   
+   <definition name="*.tiles1" extends="layout-tiles1">
+      <put-attribute name="content" value="/WEB-INF/views/tiles1/{1}.jsp"/>
+   </definition>
+   <definition name="*/*.tiles1" extends="layout-tiles1">
+      <put-attribute name="content" value="/WEB-INF/views/tiles1/{1}/{2}.jsp"/>
+   </definition>
+   <definition name="*/*/*.tiles1" extends="layout-tiles1">
+      <put-attribute name="content" value="/WEB-INF/views/tiles1/{1}/{2}/{3}.jsp"/>
+   </definition>
+   
+   
+   <!-- ==== tiles 를 사용하는 레이아웃(header,content,sideinfo,footer) 설정 시작 ==== -->
+  <definition name="layout-tiles2"  template="/WEB-INF/tiles/layout/layout-tiles2.jsp"> 
+      <put-attribute name="header"  value="/WEB-INF/tiles/tile2/header.jsp" />
+      <put-attribute name="content" value="" />
+      <put-attribute name="sideinfo"  value="/WEB-INF/tiles/tile2/sideinfo.jsp" />
+      <put-attribute name="footer"  value="/WEB-INF/tiles/tile2/footer.jsp" />
+   </definition>
+   
+   <definition name="*.tiles2" extends="layout-tiles2">
+      <put-attribute name="content" value="/WEB-INF/views/tiles2/{1}.jsp"/>
+   </definition>
+   <definition name="*/*.tiles2" extends="layout-tiles2">
+      <put-attribute name="content" value="/WEB-INF/views/tiles2/{1}/{2}.jsp"/>
+   </definition>
+   <definition name="*/*/*.tiles2" extends="layout-tiles2">
+      <put-attribute name="content" value="/WEB-INF/views/tiles2/{1}/{2}/{3}.jsp"/>
+   </definition> 
+   
+   
+   <!-- === tiles 레이아웃3: 헤더 + 사이드바 + 바디 === -->
+    <definition name="layout-tiles3"  template="/WEB-INF/tiles/layout/layout-tiles3.jsp"> 
+      <put-attribute name="header"  value="/WEB-INF/tiles/common_header.jsp" />
+      <put-attribute name="side"  value="" />
+      <put-attribute name="content" value="" />
+   </definition>
+    
+   <!-- 폴더명/파일명 -->
+  <definition name="*/*.tiles3" extends="layout-tiles3">
+      <put-attribute name="content" value="/WEB-INF/views/tiles3/{1}/content/{2}.jsp"/>
+      <put-attribute name="side" value="/WEB-INF/views/tiles3/{1}/side.jsp"/>
+   </definition>
+   
+   <!-- 폴더명/폴더명2/파일명 -->
+   <definition name="*/*/*.tiles3" extends="layout-tiles3">
+      <put-attribute name="content" value="/WEB-INF/views/tiles3/{1}/content/{2}/{3}.jsp"/>
+      <put-attribute name="side" value="/WEB-INF/views/tiles3/{1}/side.jsp"/>
+   </definition>
+ 
+   <!-- 폴더명/폴더명2/폴더명3/파일명 -->
+  <definition name="*/*/*/*.tiles3" extends="layout-tiles3">
+      <put-attribute name="content" value="/WEB-INF/views/tiles3/{1}/content/{2}/{3}/{4}.jsp"/>
+      <put-attribute name="side" value="/WEB-INF/views/tiles3/{1}/side.jsp"/>
+   </definition>
+ 
+   <!-- === tiles 레이아웃4: 헤더 + 바디 === -->
+    <definition name="layout-tiles4"  template="/WEB-INF/tiles/layout/layout-tiles4.jsp"> 
+      <put-attribute name="header"  value="/WEB-INF/tiles/common_header.jsp" />
+      <put-attribute name="content" value="" />
+   </definition>
+   
+   <!-- 폴더명/파일명 -->
+   <definition name="*/*.tiles4" extends="layout-tiles4">
+      <put-attribute name="content" value="/WEB-INF/views/tiles4/{1}/content/{2}.jsp"/>
+   </definition>
+   
+   <!-- 폴더명/폴더명2/파일명 -->
+  <definition name="*/*/*.tiles4" extends="layout-tiles4">
+      <put-attribute name="content" value="/WEB-INF/views/tiles4/{1}/content/{2}/{3}.jsp"/>
+   </definition>
+
+   <!-- 폴더명/폴더명2/폴더명3/파일명 -->
+  <definition name="*/*/*/*.tiles4" extends="layout-tiles4">
+      <put-attribute name="content" value="/WEB-INF/views/tiles4/{1}/content/{2}/{3}/{4}.jsp"/>
+   </definition>
+
+</tiles-definitions> 
