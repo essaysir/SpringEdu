@@ -152,11 +152,18 @@
 			
 			<!--  // ==== #88. 댓글 쓰기 (tbl_comment 테이블에 insert 를 한다 ) -->
 			<insert id= "addComment" parameterType="com.spring.board.model.CommentVO" >
-						<!--   첨부파일이 없는 경우 -->
-						insert into tbl_comment(seq, fk_userid, name, content, regDate, parentSeq, status) 						
-						values ( commentSeq.nextval , #{fk_userid} , #{name} , #{content} , default , #{parentSeq} , default )
-						<!--   첨부파일이 있는 경우 -->
 			
+						<if test="fileName == null">
+						<!--   첨부파일이 없는 경우 -->
+						insert into tbl_comment(seq, fk_userid, name, content, regDate, parentSeq, status ) 						
+						values ( commentSeq.nextval , #{fk_userid} , #{name} , #{content} , default , #{parentSeq} , default )
+						</if>
+						<if test="fileName != null">
+						<!--   첨부파일이 있는 경우 -->
+						insert into tbl_comment(seq, fk_userid, name, content, regDate, parentSeq, status , fileName , orgFilename , fileSize) 						
+						values ( commentSeq.nextval , #{fk_userid} , #{name} , #{content} , default , #{parentSeq} , default  , #{fileName} , #{orgFilename} , #{fileSize})
+						</if>
+						
 			</insert>
 			<!--  // ==== #89.-1  tbl_board 테이블에 commentCount 컬럼이 1증가(update) 하도록 요청한다.-->
 			<update id="updateCommentCount" parameterType="String">
@@ -332,13 +339,16 @@
 			</select>
 	    <!--  	// === #130. 원게시물에 딸린 댓글들을 페이징 처리해서 조회해오기 (Ajax로 처리) === -->	
 	    	<select id="getCommentListPaging" parameterType="HashMap" resultType="com.spring.board.model.CommentVO">
-	    		select name, content, regDate
+	    		select RNO , name, content, regDate , fileName , fileSize , orgFileName 
             from
             (
-            select row_number() over(order by seq desc) AS rno,
-                   name, content, to_char(regDate, 'yyyy-mm-dd hh24:mi:ss') AS regDate
-            from tbl_comment
-            where status = 1 and parentSeq = #{parentSeq}
+           select rownum AS rno  , seq, name, content, to_char(regDate, 'yyyy-mm-dd hh24:mi:ss') AS regDate
+			     , nvl(fileName,' ') AS fileName
+			     , nvl(orgFilename, ' ') AS orgFilename
+			     , nvl(to_char(fileSize), ' ') AS fileSize 
+			from tbl_comment
+			where parentSeq = #{parentSeq}
+			order by seq desc
             ) V
             where rno between #{startRno} and #{endRno}
 	    	</select> 

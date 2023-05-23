@@ -106,7 +106,7 @@
 	            const frm = document.addFrm;
 	            frm.method = "POST";
 	            frm.action = "<%= ctxPath%>/addEnd.action";
-	       //     frm.submit();
+	       		frm.submit();
      	});
      
   });// end of $(document).ready(function(){})-------------------------------

@@ -36,7 +36,6 @@
 		  		alert("댓글 내용을 입력하세요");
 		  		return ; //  종료 
 		  	}
-		  	
 		  	if ( $('input#attach').val() == "" ) {
 		  		// 첨부파일이 없는 댓글 쓰기인 경우
 		  		goAddWrite_noattach();
@@ -46,7 +45,9 @@
 		  		goAddWrite_withattach();
 		  	}
 	  }
-  
+  	 
+  		
+  		
 	  // 파일첨부가 없는 댓글쓰기 
   	  function goAddWrite_noattach (){
 	  		<%--
@@ -97,7 +98,47 @@
   
   
  	 // ==== #169. 파일첨부가 있는 댓글쓰기 ==== // 
-  
+  		function goAddWrite_withattach() {
+  			<%-- === ajax로 파일을 업로드할때 가장 널리 사용하는 방법 ==> ajaxForm === //
+  		         === 우선 ajaxForm 을 사용하기 위해서는 jquery.form.min.js 이 있어야 하며
+  		             /WEB-INF/tiles/layout/layout-tiles1.jsp 와 
+  		             /WEB-INF/tiles/layout/layout-tiles2.jsp 와 
+  		             /WEB-INF/tiles/layout/layout-tiles3.jsp 와 
+  		             /WEB-INF/tiles/layout/layout-tiles4.jsp 에 기술해 두었다. 
+  		     --%>
+  			const queryString = $("form[name='addWriteFrm']").serialize();
+  		  	 // console.log(queryString);
+  	      $("form[name='addWriteFrm']").ajaxForm({
+  	  		 url:"<%= request.getContextPath()%>/addComment_withAttach.action",
+  	  		 data:queryString,
+  	  		 type:"post",
+  	  		 enctype:"multipart/form-data",
+  	  		 dataType:"json",
+  	  		 success:function(json){
+  	  			 console.log("~~ 확인용 : " + JSON.stringify(json));
+  	  			 // ~~ 확인용 : {"name":"서영학","n":1}
+  	  			 // 또는 
+  	  			 // ~~ 확인용 : {"name":"서영학","n":0} 
+  	  			 
+  	  			 if(json.n == 0) {
+  	  				 alert(json.name + "님의 포인트는 300점을 초과할 수 없으므로 댓글쓰기가 불가합니다.");
+  	  			 }
+  	  			 else {
+  	  			   // goReadComment();  // 페이징 처리 안한 댓글 읽어오기
+  	  				  goViewComment(1); // 페이징 처리 한 댓글 읽어오기
+  	  			 }
+  	  			 
+  	  			 $("input#commentContent").val("");
+  	  			 $("input#attach").val("");
+  	  		 },
+  	  		 error: function(request, status, error){
+  				alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+  		     }
+  	      });
+  		  
+  			$("form[name='addWriteFrm']").submit();
+  		  	
+  	  	} // end of function goAddWrite_withattach() {
   
   
   // === 페이징 처리 안한 댓글 읽어오기  === //
@@ -150,8 +191,13 @@
   		  						html += "<tr>" + 
   		  									"<td>"+(index+1)+"</td>" + 
   		  									"<td>" + item.content+ "</td>" + 
-  		  									"<td></td>" + 
-  		  									"<td></td>" + 
+  		  									<%-- === 첨부파일의 기능이 추가된 경우 시작 --%>
+  		  									
+  		  									"<td>"+item.orgFilename+"</td>" + 
+  		  									"<td>"+item.fileSize+"</td>" + 
+  		  									
+  		  									<%-- === 첨부파일의 기능이 추가된 경우 끝 --%>
+  		  									
   		  									"<td>"+item.name+"</td>" + 
   		  									"<td>"+item.regdate+"</td>" + 
   		  									"</tr>"
@@ -380,7 +426,7 @@
        </table>
        <br/>
        
-       <c:set var="v_gobackURL" value='${ fn:replace(gobackURL , "&"  , " " ) }' />
+      <%--  <c:set var="v_gobackURL" value='${ fn:replace(gobackURL , "&"  , " " ) }' /> --%>
        
        <%-- 글조회수 1증가를 위해서  view.action 대신에 view_2.action 으로 바꾼다. --%>
        <div style="margin-bottom: 1%;">이전글제목&nbsp;&nbsp;<span class="move" onclick="javascript:location.href='<%=ctxPath%>/view_2.action?seq=${bdvo.previousseq}&searchType=${paraMap.searchType}&searchWord=${paraMap.searchWord}&gobackURL=${v_gobackURL}'">${bdvo.previoussubject}</span></div>
@@ -400,8 +446,8 @@
        <%-- === #141. 어떤글에 대한 답변글쓰기는 로그인 되어진 회원의 gradelevel 컬럼의 값이 10인 직원들만 답변글쓰기가 가능하다.  === --%>
      
        <c:if test="${sessionScope.loginuser.gradelevel == 10 }">
-       		 <span>groupno  :  ${bdvo.groupno} </span>
-       		 <span>depthno  :  ${bdvo.depthno }</span>
+       		 <span style="display:none;">groupno  :  ${bdvo.groupno} </span>
+       		 <span style="display:none;">depthno  :  ${bdvo.depthno }</span>
        		 
              <button type="button" class="btn btn-secondary btn-sm mr-3" onclick="javascript:location.href='<%=ctxPath%>/add.action?fk_seq=${bdvo.seq}&groupno=${bdvo.groupno }&depthno=${bdvo.depthno}&subject=${bdvo.subject}'">답변 글쓰기</button>
        </c:if>
@@ -409,7 +455,7 @@
        <%-- === #83. 댓글쓰기 폼 추가 === --%>
        <c:if test="${not empty sessionScope.loginuser}">
 	      <h3 style="margin-top : 50px;" >댓글쓰기 </h3>
-	       <form name="addWriteFrm" id="addWriteFrm" style="margin-top: 20px;">
+	       <form name="addWriteFrm" id="addWriteFrm" style="margin-top: 20px;" enctype="multipart/form-data">
 	             <table class="table" style="width: 1024px">
 	               <tr style="height: 30px;">
 	                  <th width="10%">성명</th>
