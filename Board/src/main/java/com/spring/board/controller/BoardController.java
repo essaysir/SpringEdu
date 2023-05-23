@@ -1124,6 +1124,8 @@ public class BoardController {
 		Map<String, String> paraMap = new HashMap<>();
 		paraMap.put("seq", seq);
 
+	
+		
 		// 글 수정해야 할 글1개 내용 가져오기
 		BoardVO bdvo = service.getViewWithNoAddCount(paraMap);
 		HttpSession session = request.getSession();
@@ -1182,7 +1184,10 @@ public class BoardController {
 		String seq = request.getParameter("seq");
 		Map<String, String> paraMap = new HashMap<>();
 		paraMap.put("seq", seq);
+		paraMap.put("searchType", "");
+		paraMap.put("searchWord", "");
 
+		
 		// 삭제해야할 글 1개 내용 가져와서 로그인한 사람이 쓴 글이라면 글 삭제가 가능하지만
 		// 다른 사람의 글은 삭제가 불가합니다.
 		BoardVO bdvo = service.getViewWithNoAddCount(paraMap);
@@ -1218,7 +1223,29 @@ public class BoardController {
 		// System.out.println("CONT 확인용 : " + seq);
 		Map<String, String> paraMap = new HashMap<>();
 		paraMap.put("seq", seq);
-
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// === #164.  파일첨부가 된 글이라면 글 삭제시 먼저 첨부 파일을 삭제해주어야 한다. 
+		paraMap.put("searchType", "");
+		paraMap.put("searchWord", "");
+		
+		BoardVO bdvo = service.getViewWithNoAddCount(paraMap);
+		String fileName = bdvo.getFileName();
+		
+		if ( fileName != null && !"".equals(fileName) ) {
+			HttpSession session = request.getSession();
+			String root = session.getServletContext().getRealPath("/");
+			String path = root + "resources" + File.separator + "files" ;
+			
+			paraMap.put("path", path); // 삭제해야할 파일이 저장된 경로
+			paraMap.put("fileName", fileName) ; //삭제해야할 파일 이름
+		}
+		
+		// 끝 
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		
+		
 		int n = service.del(paraMap);
 		// System.out.println(n);
 		if (n == 1) {
