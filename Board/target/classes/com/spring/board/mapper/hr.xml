@@ -11,4 +11,43 @@
 				values( 101, '엄정화' , default , '서울시 마포구' )
 			</insert>
 			
+			<select id="depIdList" resultType="String">
+				select distinct (nvl( department_id , -9999 )) as department_id  from employees
+				order by department_id asc
+			</select>
+			
+			<resultMap type="HashMap" id="empDeptMap">
+				<result property="department_id" column="department_id" javaType="String" />
+				<result property="department_name" column="department_name" javaType="String" />
+				<result property="employee_id" column="employee_id" javaType="String" />
+				<result property="fullname" column="fullname" javaType="String" />
+				<result property="hire_date" column="hire_date" javaType="String" />
+				<result property="monthsal" column="monthsal" javaType="String" />
+				<result property="gender" column="gender" javaType="String" />
+				<result property="age" column="age" javaType="String" />
+			</resultMap>
+			
+			<select id="empList" resultMap="empDeptMap" parameterType="HashMap">
+			select E.department_id , D.department_name , E.employee_id , 
+			       E.first_name || '' || E.last_name AS fullname , 
+			       to_char(E.hire_date , 'yyyy-mm-dd' ) AS hire_date , 
+			       nvl (E.salary + E.salary* e.commission_pct , E.salary ) as monthsal ,
+			       func_gender (E.jubun) AS gender ,
+			       func_age (E.jubun) AS age
+			from employees E left join departments D
+			on E.department_id = D.department_id
+			where  1=1 
+			<if test="arr_DeptId != null">
+				and nvl(E.department_id ,-9999) in 
+				<foreach collection="arr_DeptId" index="i" open="(" separator="," close=")">
+						'${arr_DeptId[i]}'
+				</foreach>
+			</if>
+			
+			<if test="gender != null">
+				and func_gender(E.jubun) = #{gender}
+			</if>
+			order by E.department_id , E.employee_id
+			</select>
+			
 </mapper>

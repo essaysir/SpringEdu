@@ -1673,4 +1673,11 @@ public class BoardController {
 			return json.toString();
 		}
 	
+		// === #171. 파일첨부가 있는 댓글쓰기에서 파일 다운로드 받기 === // 
+		@RequestMapping(value="/downloadComment.action")
+		public void requiredLogin_downloadComment(HttpServletRequest request , HttpServletResponse response)	{
+			
+			 
+		
+		}
 } // end of BoardController 

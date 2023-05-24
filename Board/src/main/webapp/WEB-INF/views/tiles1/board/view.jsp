@@ -190,17 +190,23 @@
   		  				$.each( json , function(index, item ){
   		  						html += "<tr>" + 
   		  									"<td>"+(index+1)+"</td>" + 
-  		  									"<td>" + item.content+ "</td>" + 
+  		  									"<td>" + item.content+ "</td>"  
   		  									<%-- === 첨부파일의 기능이 추가된 경우 시작 --%>
-  		  									
-  		  									"<td>"+item.orgFilename+"</td>" + 
-  		  									"<td>"+item.fileSize+"</td>" + 
+  		  									if ( ${sessionScope.loginuser != null }){
+  		  										html +=	"<td><a href='<%=ctxPath%>/downloadComment.action?seq=${item.seq}'>"+item.orgFilename+"</a></td>" ; 
+  		  									}
+  		  									else{ 
+	  		  									html += "<td>"+item.orgFilename+"</td>" ; 
+  		  									}
+  		  										
+  		  										
+  		  									html += "<td>"+item.fileSize+"</td>"  ; 
   		  									
   		  									<%-- === 첨부파일의 기능이 추가된 경우 끝 --%>
   		  									
-  		  									"<td>"+item.name+"</td>" + 
+  		  									html += "<td>"+item.name+"</td>" + 
   		  									"<td>"+item.regdate+"</td>" + 
-  		  									"</tr>"
+  		  									"</tr>" ;
   		  				});
   		  			}
   		  			else {

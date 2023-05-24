@@ -584,7 +584,10 @@ alter table tbl_comment
 add fileSize number;   -- 파일크기 
 
 select *
-from tbl_comment;
+from tbl_comment
+where userid = 'sonjs4';
+
+desc tbl_comment ;
 
 select seq, name, content, to_char(regDate, 'yyyy-mm-dd hh24:mi:ss') AS regDate
      , nvl(fileName,' ') AS fileName
@@ -656,5 +659,17 @@ commit;
 select * from spring_test ;
 
 delete from table_name ;
+
+--------------------------------- 인사관리 --------------------------------------------
+show user ; 
+
+select *
+from employees ;
+
+select distinct (nvl( department_id , -9999 )) as department_id  from employees
+order by department_id asc ;
+
+
+
 
 
