@@ -25,12 +25,12 @@
     <!-- 스프링 프레임워크(Spring Framework)에서 JSP가 아닌 컨트롤러를 호출하여 파일을 다운로드 하려면 다음과 같은 단계를 거쳐야 한다. 
         BeanNameViewResolver 뷰 리졸버를 추가한 후 파일 다운로드를 처리해줄 빈을 등록한다.
             쉽게 생각해서 파일 다운로드 처리를 해주는 view 페이지 라고 생각하면 된다. -->
-   <!--     
+       
    <beans:bean id="excelDownloadView" class="com.spring.excel.ExcelDownloadView"/>
    <beans:bean id="beanNameViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
         <beans:property name="order" value="0"/>
     </beans:bean>
-    -->
+    
    <!-- BeanNameViewResolver 컨트롤러에서 리턴 받은 뷰의 이름과 빈에 등록되어 있는 id의 값이 같은것을 찾아서 빈을 실행시킬 때 쓰인다.
        주로 커스텀하게 만들어진 View 클래스를 뷰로 사용해야 하는 경우에 사용한다. 
    

@@ -25,5 +25,11 @@ public class EmpService implements InterEmpService{
 			List<Map<String, String>> empList = dao.empList(paraMap);
 			return empList;
 		}
+		//  Excel 파일을 업로드 하면 엑셀데이터를 데이터베이스 테이블에 insert 하는 예제 ===
+		@Override
+		public int addEmpList(List<Map<String, String>> paraMapList) {
+			int n = dao.addEmpList(paraMapList);
+			return n;
+		}
 		
 }

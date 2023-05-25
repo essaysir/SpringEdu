@@ -669,7 +669,27 @@ from employees ;
 select distinct (nvl( department_id , -9999 )) as department_id  from employees
 order by department_id asc ;
 
-
-
-
-
+			select E.department_id , D.department_name , E.employee_id , 
+			       E.first_name || '' || E.last_name AS fullname , 
+			       to_char(E.hire_date , 'yyyy-mm-dd' ) AS hire_date , 
+			       nvl (E.salary + E.salary* e.commission_pct , E.salary ) as monthsal ,
+			       func_gender (E.jubun) AS gender ,
+			       func_age (E.jubun) AS age
+			from employees E left join departments D
+			on E.department_id = D.department_id
+            where 1=1 
+            and nvl(E.department_id ,-9999) in ('-9999','30') 
+			and func_gender(E.jubun) = '여' 
+            order by E.department_id , E.employee_id
+			
+select E.department_id , D.department_name , E.employee_id , 
+			       E.first_name || '' || E.last_name AS fullname , 
+			       to_char(E.hire_date , 'yyyy-mm-dd' ) AS hire_date , 
+			       nvl (E.salary + E.salary* e.commission_pct , E.salary ) as monthsal ,
+			       func_gender (E.jubun) AS gender ,
+			       func_age (E.jubun) AS age
+			from employees E left join departments D
+			on E.department_id = D.department_id
+            where 1=1 and nvl(E.department_id ,-9999) in ('-9999','30') 
+			order by E.department_id , E.employee_id
+			

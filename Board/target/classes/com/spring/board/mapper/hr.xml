@@ -50,4 +50,9 @@
 			order by E.department_id , E.employee_id
 			</select>
 			
+			<insert id="addEmpList" parameterType="HashMap">
+					insert into employees(EMPLOYEE_ID, FIRST_NAME, LAST_NAME, EMAIL, PHONE_NUMBER, HIRE_DATE, JOB_ID, SALARY, COMMISSION_PCT, MANAGER_ID, DEPARTMENT_ID, JUBUN) 
+       				values( to_number( #{EMPLOYEE_ID} ) , #{FIRST_NAME} , #{LAST_NAME} , #{EMAIL} , #{PHONE_NUMBER} , to_date( #{HIRE_DATE} , 'yyyy-mm-dd') , #{JOB_ID} , to_number(#{SALARY}) , to_number(#{COMMISSION_PCT}) , to_number(#{MANAGER_ID}) , to_number( #{DEPARTMENT_ID} ) , #{JUBUN} )			
+      		 </insert>
+			
 </mapper>

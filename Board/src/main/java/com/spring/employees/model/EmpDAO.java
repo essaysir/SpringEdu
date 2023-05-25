@@ -29,6 +29,21 @@ public class EmpDAO implements InterEmpDAO {
 		List<Map<String, String>> empList = sqlsession_2.selectList("hr.empList" , paraMap);
 		return empList;
 	}
+
+	@Override
+	public int addEmpList(List<Map<String, String>> paraMapList) {
+		int insert_count = 0  ;
+		if ( paraMapList != null && paraMapList.size() > 0 ) {
+			for ( Map<String,String> paraMap : paraMapList) {
+				int n = sqlsession_2.insert("hr.addEmpList", paraMap);
+				insert_count += n ;
+			}
+			
+			
+		}
+		
+		return insert_count ;
+	}
 	
 	
 	
