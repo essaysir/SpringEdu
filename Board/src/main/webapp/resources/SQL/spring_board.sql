@@ -686,10 +686,56 @@ select E.department_id , D.department_name , E.employee_id ,
 			       E.first_name || '' || E.last_name AS fullname , 
 			       to_char(E.hire_date , 'yyyy-mm-dd' ) AS hire_date , 
 			       nvl (E.salary + E.salary* e.commission_pct , E.salary ) as monthsal ,
-			       func_gender (E.jubun) AS gender ,
+			         AS gender ,
 			       func_age (E.jubun) AS age
 			from employees E left join departments D
 			on E.department_id = D.department_id
             where 1=1 and nvl(E.department_id ,-9999) in ('-9999','30') 
 			order by E.department_id , E.employee_id
 			
+-------------------------------------------------------------------------------------------------------------
+
+-- employees 테이블에서 부서명별 인원수 및 퍼센티지 가져오기 -- 
+--- 부서별 
+select nvl(D.department_name, '부서없음') as department_name , count(*) as cnt , round (count(*)/(select count(*) from employees )*100 , 2 ) as percent  
+from employees E left join departments D
+on E.department_id = D.department_id
+group by D.department_name
+order by cnt desc ;
+
+--- 성별
+select E.gender ,count(*) as cnt , round (count(*)/(select count(*) from employees )*100 , 2 ) as percent  
+from 
+(
+select department_id  , func_gender( jubun ) as gender , jubun 
+from employees 
+)
+E 
+group by gender
+order by cnt desc ;
+
+-- 성별 입사년도별 인원수 알아오기  --
+-- 내 풀이
+select hire_date , E.gender ,count(*) as cnt , round (count(*)/(select count(*) from employees )*100 , 2 ) as percent  
+from 
+(
+select department_id  , func_gender( jubun ) as gender , jubun , to_char(hire_date , 'yyyy' ) as hire_date
+from employees 
+)
+E 
+group by hire_date , gender
+order by hire_date desc , cnt desc ;
+
+-- 선생님 풀이  
+select func_gender(jubun) AS gender ,
+        , extract( year from hire_date ) 
+from employees 
+group by func_gender(jubun) 
+
+select  extract( year from hire_date ) AS HIRE_DATE
+from employees 
+where extract ( year from hire_date ) between 2001 and 2008
+
+
+
+desc employees; 

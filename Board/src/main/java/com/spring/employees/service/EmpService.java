@@ -31,5 +31,27 @@ public class EmpService implements InterEmpService{
 			int n = dao.addEmpList(paraMapList);
 			return n;
 		}
+
+		 // 차트그리기 ( Ajax ) 부서명 별 인원수 및 퍼센티지 가져오기 ===
+		@Override
+		public List<Map<String, String>> employeeCntByDeptname() {
+			List<Map<String,String>> mapList = dao.employeeCntByDeptname();
+			
+			return mapList ;
+		}
+
+		@Override
+		public List<Map<String, String>> employeeCntByGender() {
+			List<Map<String,String>> mapList = dao.employeeCntByGender();
+			
+			return mapList ;
+		}
+
+		@Override
+		public List<Map<String, String>> employeeCntByGenderHireYear() {
+			List<Map<String,String>> mapList = dao.employeeCntByGenderHireYear();
+			
+			return mapList ;
+		}
 		
 }

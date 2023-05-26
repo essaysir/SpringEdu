@@ -54,5 +54,64 @@
 					insert into employees(EMPLOYEE_ID, FIRST_NAME, LAST_NAME, EMAIL, PHONE_NUMBER, HIRE_DATE, JOB_ID, SALARY, COMMISSION_PCT, MANAGER_ID, DEPARTMENT_ID, JUBUN) 
        				values( to_number( #{EMPLOYEE_ID} ) , #{FIRST_NAME} , #{LAST_NAME} , #{EMAIL} , #{PHONE_NUMBER} , to_date( #{HIRE_DATE} , 'yyyy-mm-dd') , #{JOB_ID} , to_number(#{SALARY}) , to_number(#{COMMISSION_PCT}) , to_number(#{MANAGER_ID}) , to_number( #{DEPARTMENT_ID} ) , #{JUBUN} )			
       		 </insert>
+      		 
+      		 <resultMap type="HashMap" id="employeeCntByDeptname_map">
+				<result property="department_name" column="department_name" javaType="String" />
+				<result property="cnt" column="cnt" javaType="String" />
+				<result property="percent" column="percent" javaType="String" />
+			</resultMap>
+      		 
+      		 <select id="employeeCntByDeptname" resultMap="employeeCntByDeptname_map">
+      		 		select nvl(D.department_name, '부서없음') as department_name , count(*) as cnt 
+      		 		, round (count(*)/(select count(*) from employees )*100 , 2 ) as percent  
+					from employees E left join departments D
+					on E.department_id = D.department_id
+					group by D.department_name
+					order by cnt desc
+      		 </select>
+      		 
+      		 <resultMap type="HashMap" id="employeeCntByGender_map">
+				<result property="gender" column="gender" javaType="String" />
+				<result property="cnt" column="cnt" javaType="String" />
+				<result property="percent" column="percent" javaType="String" />
+			</resultMap>
 			
+			<select id="employeeCntByGender" resultMap="employeeCntByGender_map">
+			select E.gender ,count(*) as cnt , round (count(*)/(select count(*) from employees )*100 , 2 ) as percent  
+			from 
+			(
+			select department_id  , func_gender( jubun ) as gender , jubun 
+			from employees 
+			)
+			E 
+			group by E.gender
+			order by cnt desc 
+			</select>
+			
+			 <resultMap type="HashMap" id="employeeCntByGenderHireYear_map">
+				<result property="gender" column="gender" javaType="String" />
+				<result property="Y2001" column="Y2001" javaType="String" />
+				<result property="Y2002" column="Y2002" javaType="String" />
+				<result property="Y2003" column="Y2003" javaType="String" />
+				<result property="Y2004" column="Y2004" javaType="String" />
+				<result property="Y2005" column="Y2005" javaType="String" />
+				<result property="Y2006" column="Y2006" javaType="String" />
+				<result property="Y2007" column="Y2007" javaType="String" />
+				<result property="Y2008" column="Y2008" javaType="String" />
+			</resultMap>
+			<select id="employeeCntByGenderHireYear" resultMap="employeeCntByGenderHireYear_map">
+			select func_gender(jubun) as gender  
+					       ,SUM ( DECODE ( extract( year from hire_date ) , 2001 , 1 , 0 )) AS "Y2001"
+					        , SUM ( DECODE ( extract( year from hire_date ) , 2002 , 1 , 0 )) AS "Y2002"
+					         , SUM ( DECODE ( extract( year from hire_date ) , 2003 , 1 , 0 )) AS "Y2003"
+					          , SUM ( DECODE ( extract( year from hire_date ) , 2004 , 1 , 0 )) AS "Y2004"
+					           , SUM ( DECODE ( extract( year from hire_date ) , 2005 , 1 , 0 )) AS "Y2005"
+					            , SUM ( DECODE ( extract( year from hire_date ) , 2006 , 1 , 0 )) AS "Y2006"
+					             , SUM ( DECODE ( extract( year from hire_date ) , 2007 , 1 , 0 )) AS "Y2007"
+					              , SUM ( DECODE ( extract( year from hire_date ) , 2008 , 1 , 0 )) AS "Y2008"
+					from employees 
+					where extract ( year from hire_date ) between 2001 and 2008
+					group by func_gender(jubun) 
+				order by 1
+			</select>
 </mapper>

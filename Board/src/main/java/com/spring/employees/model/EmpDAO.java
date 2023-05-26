@@ -44,6 +44,27 @@ public class EmpDAO implements InterEmpDAO {
 		
 		return insert_count ;
 	}
+	// 차트그리기 ( Ajax ) 부서명 별 인원수 및 퍼센티지 가져오기 ===
+	@Override
+	public List<Map<String, String>> employeeCntByDeptname() {
+		List<Map<String,String>> mapList = sqlsession_2.selectList("hr.employeeCntByDeptname");
+		
+		return mapList;
+	}
+
+	@Override
+	public List<Map<String, String>> employeeCntByGender() {
+		List<Map<String,String>> mapList = sqlsession_2.selectList("hr.employeeCntByGender");
+		
+		return mapList;
+	}
+
+	@Override
+	public List<Map<String, String>> employeeCntByGenderHireYear() {
+	List<Map<String,String>> mapList = sqlsession_2.selectList("hr.employeeCntByGenderHireYear");
+		
+		return mapList;
+	}
 	
 	
 	

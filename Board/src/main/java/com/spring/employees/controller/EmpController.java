@@ -29,6 +29,7 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,6 +40,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.spring.employees.service.InterEmpService;
 
 @Controller
@@ -485,4 +489,100 @@ public class EmpController {
 		      return value; 
 		   }
 		
+		
+		
+		// === #177. 차트( 그래프 ) 를 보여주는 예제 ( view 단 )
+		@RequestMapping(value="/emp/chart.action" ,method= {RequestMethod.GET})
+		public String chart(){
+			
+			return "emp/chart.tiles2" ;
+		}
+		
+		// 
+		// === #178. 차트그리기 ( Ajax ) 부서명 별 인원수 및 퍼센티지 가져오기 ===
+		@ResponseBody
+		@RequestMapping(value="/chart/employeeCntByDeptname.action" ,  produces="text/plain;charset=UTF-8")
+		public String employeeCntByDeptname(HttpServletRequest request) {
+			List<Map<String,String>> mapList = service.employeeCntByDeptname();
+			/*
+			 * JSONArray jsonArr = new JSONArray(); for ( Map<String,String> map : mapList)
+			 * { JSONObject jsonObj = new JSONObject(); jsonObj.put("department_name",
+			 * map.get("department_name")); jsonObj.put("cnt", map.get("cnt"));
+			 * jsonObj.put("percent", map.get("percent"));
+			 * 
+			 * jsonArr.put(jsonObj); }
+				return jsonArr.toString();
+			 */
+			
+			JsonArray jsonArr = new JsonArray() ;
+			if ( mapList != null && mapList.size() > 0 ) {
+				 for ( Map<String,String> map : mapList) {
+					 JsonObject json = new JsonObject() ;
+					 json.addProperty("department_name", map.get("department_name"));
+					 json.addProperty("cnt", map.get("cnt"));
+					 json.addProperty("percent", map.get("percent"));
+					 
+					 jsonArr.add(json);
+				 } // end of for 문 
+			}
+			
+			return new Gson().toJson(jsonArr);
+		}
+		
+		// === #179. 
+		@ResponseBody
+		@RequestMapping(value="/chart/employeeCntByGender.action" ,  produces="text/plain;charset=UTF-8")
+		public String employeeCntByGender(HttpServletRequest request) {
+			List<Map<String,String>> mapList = service.employeeCntByGender();
+			/*
+			 * JSONArray jsonArr = new JSONArray(); for ( Map<String,String> map : mapList)
+			 * { JSONObject jsonObj = new JSONObject(); jsonObj.put("department_name",
+			 * map.get("department_name")); jsonObj.put("cnt", map.get("cnt"));
+			 * jsonObj.put("percent", map.get("percent"));
+			 * 
+			 * jsonArr.put(jsonObj); }
+				return jsonArr.toString();
+			 */
+			
+			JsonArray jsonArr = new JsonArray() ;
+			if ( mapList != null && mapList.size() > 0 ) {
+				 for ( Map<String,String> map : mapList) {
+					 JsonObject json = new JsonObject() ;
+					 json.addProperty("gender", map.get("gender"));
+					 json.addProperty("cnt", map.get("cnt"));
+					 json.addProperty("percent", map.get("percent"));
+					 
+					 jsonArr.add(json);
+				 } // end of for 문 
+			}
+			
+			return new Gson().toJson(jsonArr);
+		}
+
+		// === #180. 차트그리기(Ajax) 성별별 입사년도별 인원수 가져오기 === // 
+		@ResponseBody
+		@RequestMapping(value="/chart/employeeCntByGenderHireYear.action" ,  produces="text/plain;charset=UTF-8")
+		public String employeeCntByGenderHireYear(HttpServletRequest request) {
+			List<Map<String,String>> mapList = service.employeeCntByGenderHireYear();
+
+			JsonArray jsonArr = new JsonArray() ;
+			if ( mapList != null && mapList.size() > 0 ) {
+				 for ( Map<String,String> map : mapList) {
+					 JsonObject json = new JsonObject() ;
+					 json.addProperty("gender", map.get("gender"));
+					 json.addProperty("Y2001", map.get("Y2001"));
+					 json.addProperty("Y2002", map.get("Y2002"));
+					 json.addProperty("Y2003", map.get("Y2003"));
+					 json.addProperty("Y2004", map.get("Y2004"));
+					 json.addProperty("Y2005", map.get("Y2005"));
+					 json.addProperty("Y2006", map.get("Y2006"));
+					 json.addProperty("Y2007", map.get("Y2007"));
+					 json.addProperty("Y2008", map.get("Y2008"));
+					 
+					 jsonArr.add(json);
+				 } // end of for 문 
+			}
+			
+			return new Gson().toJson(jsonArr);
+		}
 }
