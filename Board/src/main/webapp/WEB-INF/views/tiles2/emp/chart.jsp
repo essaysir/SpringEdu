@@ -400,7 +400,7 @@ div#table_container table {width: 100%}
 
 						    tooltip: {
 						        headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-						        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
+						        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total , 명<br/>'
 						    },
 
 						    series: [

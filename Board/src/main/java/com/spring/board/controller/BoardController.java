@@ -18,6 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -1676,8 +1677,18 @@ public class BoardController {
 		// === #171. 파일첨부가 있는 댓글쓰기에서 파일 다운로드 받기 === // 
 		@RequestMapping(value="/downloadComment.action")
 		public void requiredLogin_downloadComment(HttpServletRequest request , HttpServletResponse response)	{
-			
-			 
-		
+
 		}
+		
+		// === 다중 파일 첨부가 되는 이메일 보내기 시작 === // 
+		@GetMapping(value="/emailWrite.action")
+		public String emailWrite() {
+			
+			return "email/emailWrite.tiles1";
+		    //  /WEB-INF/views/tiles1/email/emailWrite.jsp 페이지를 만들어야 한다.
+		}
+		
+		// === 다중 파일 첨부가 되는 이메일 보내기 끝 === // 
+		
+		
 } // end of BoardController 

@@ -607,7 +607,7 @@ public class EmpController {
 		      return "emp/geocoder.tiles2";
 		   }
 		   
-		   // === 차트 그리기 => 특정 부서명에 근무하는 직원들의 성별 인원수 및 퍼센티지 가져오기 === 
+		   // === #180. 차트 그리기 => 특정 부서명에 근무하는 직원들의 성별 인원수 및 퍼센티지 가져오기 === 
 		   @ResponseBody
 		   @GetMapping(value="/chart/genderCntSpecialDeptname.action", produces="text/plain;charset=UTF-8" )
 		   public String genderCntSpecialDeptname(@RequestParam String deptname) {
@@ -617,6 +617,8 @@ public class EmpController {
 			   
 			   return result ;
 		   }
+		   
+		   // === #181.  
 		   
 		   
 		   
