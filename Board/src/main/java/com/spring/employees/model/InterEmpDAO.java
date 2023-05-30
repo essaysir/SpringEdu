@@ -17,4 +17,6 @@ public interface InterEmpDAO {
 
 	List<Map<String, String>> employeeCntByGenderHireYear();
 
+	List<Map<String, String>> genderCntSpecialDeptname(String deptname);
+
 }

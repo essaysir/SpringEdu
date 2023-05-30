@@ -317,13 +317,13 @@ div#table_container table {width: 100%}
 			
 			
 			case "deptnameGender": // 부서별 성별 인원통계 선택한 경우
-				
+				$("div#table_container").empty();
 				$.ajax({
 					url:"<%=ctxPath%>/chart/employeeCntByDeptname.action",	
 					dataType:"json",
-					success:function(json){
+					success:function(json1){
 						let deptnameArr = []; // 부서명별 인원수 퍼센티지 객체 배열
-						$.each(json, function(index, item){
+						$.each(json1, function(index, item){
 							deptnameArr.push({name: item.department_name ,
 			                    y: Number(item.percent),
 			                    drilldown: item.department_name});
@@ -332,10 +332,27 @@ div#table_container table {width: 100%}
 						let genderArr = []; // 특정 부서명에 근무하는 직원들의 성별 인원수 퍼센티지 객체 배열 
 						
 						
-						$.each(json , function(index,item){
+						$.each(json1 , function(index,item){
 							$.ajax({
 								url:"<%=ctxPath%>/chart/genderCntSpecialDeptname.action",
-								data: {"deptname" : item.department_name }
+								data: {"deptname" : item.department_name },
+								dataType:"json",
+								success:function(json2){
+									// console.log(JSON.stringify(json2));
+									let subArr = []; 
+									$.each(json2 , function(index2, item2){
+										subArr.push([item2.gender , Number(item2.percent)]) ;
+										
+									});
+									
+									genderArr.push({ name: item.department_name ,
+																			   id: item.department_name ,
+																		   data: subArr })	
+								},
+								error: function(request, status, error){
+					                  alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+								}
+								
 							});
 							
 						});

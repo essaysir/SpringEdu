@@ -17,4 +17,6 @@ public interface InterEmpService {
 
 	List<Map<String, String>> employeeCntByGenderHireYear();
 
+	List<Map<String, String>> genderCntSpecialDeptname(String deptname);  // === 차트 그리기 => 특정 부서명에 근무하는 직원들의 성별 인원수 및 퍼센티지 가져오기 === 
+
 }

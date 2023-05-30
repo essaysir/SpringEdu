@@ -65,6 +65,13 @@ public class EmpDAO implements InterEmpDAO {
 		
 		return mapList;
 	}
+
+	@Override
+	public List<Map<String, String>> genderCntSpecialDeptname(String deptname) {
+		List<Map<String, String>> List = sqlsession_2.selectList("hr.genderCntSpecialDeptname" , deptname );
+		
+		return List;
+	}
 	
 	
 	

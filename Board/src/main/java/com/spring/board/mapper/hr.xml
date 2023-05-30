@@ -114,4 +114,21 @@
 					group by func_gender(jubun) 
 				order by 1
 			</select>
+			
+			<select id="genderCntSpecialDeptname"  parameterType="String" resultMap="employeeCntByGender_map">
+					select func_gender(jubun) AS gender ,
+					        count (*) as cnt , 
+					         round (count(*)/(select count(*) from employees )*100 , 2 ) as percent  
+					from employees E left join departments D
+					ON E.department_id = D.department_id 
+					<if test="deptname != '부서없음' ">
+						where D.department_name = #{deptname} 
+					</if>
+					<if test="deptname == '부서없음' ">
+						where D.department_name is null 
+					</if>
+					
+					group by  func_gender(jubun)
+					order by gender			
+			</select>
 </mapper>

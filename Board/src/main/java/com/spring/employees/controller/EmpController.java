@@ -34,8 +34,10 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -598,11 +600,25 @@ public class EmpController {
 			return result; // new Gson().toJson(jsonArr);
 		}
 		
-		// === 주소를 위도/경도로 변환하기 === // 
+			// === 주소를 위도/경도로 변환하기 === // 
 		   @RequestMapping(value="/emp/geocoder.action", produces="text/plain;charset=UTF-8") 
 		   public String geocoding(HttpServletRequest request) {
 		            
 		      return "emp/geocoder.tiles2";
 		   }
+		   
+		   // === 차트 그리기 => 특정 부서명에 근무하는 직원들의 성별 인원수 및 퍼센티지 가져오기 === 
+		   @ResponseBody
+		   @GetMapping(value="/chart/genderCntSpecialDeptname.action", produces="text/plain;charset=UTF-8" )
+		   public String genderCntSpecialDeptname(@RequestParam String deptname) {
+			   List<Map<String,String>> List = service.genderCntSpecialDeptname(deptname);
+			   Gson gson = new Gson();
+			   String result = gson.toJson(List);
+			   
+			   return result ;
+		   }
+		   
+		   
+		   
 		   
 }

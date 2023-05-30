@@ -53,5 +53,12 @@ public class EmpService implements InterEmpService{
 			
 			return mapList ;
 		}
+
+		@Override
+		public List<Map<String, String>> genderCntSpecialDeptname(String deptname) {
+			List<Map<String,String>> List = dao.genderCntSpecialDeptname(deptname) ;
+			
+			return List;
+		}
 		
 }
