@@ -1,0 +1,6 @@
+1) 프로젝트-마우스 우측 - Properties
+2) Javascript(또는 Client-side  Javascript)> Include Path > Source 탭
+         프로젝트명의 > 누름 - 아래의 Excluded 선택 - 우측 Edit 버튼 클릭
+3) Exclusion patterns:  Add 버튼을 클릭하여 패턴을 추가
+     **/SVG*.js
+4) STS에 다시 하이챠트 js를 넣어 주세요. 그러면 에러 표시가 사라진다.

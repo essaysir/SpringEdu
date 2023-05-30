@@ -732,10 +732,38 @@ select func_gender(jubun) AS gender ,
 from employees 
 group by func_gender(jubun) 
 
-select  extract( year from hire_date ) AS HIRE_DATE
+select    extract( year from hire_date )
+        , DECODE ( extract( year from hire_date ) , 2001 , 1 , 0 ) AS "Y2001"
+        , DECODE ( extract( year from hire_date ) , 2002 , 1 , 0 ) AS "Y2002"
 from employees 
 where extract ( year from hire_date ) between 2001 and 2008
 
 
+select func_gender(jubun) as gender  
+       ,SUM ( DECODE ( extract( year from hire_date ) , 2001 , 1 , 0 )) AS "Y2001"
+        , SUM ( DECODE ( extract( year from hire_date ) , 2002 , 1 , 0 )) AS "Y2002"
+         , SUM ( DECODE ( extract( year from hire_date ) , 2003 , 1 , 0 )) AS "Y2003"
+          , SUM ( DECODE ( extract( year from hire_date ) , 2004 , 1 , 0 )) AS "Y2004"
+           , SUM ( DECODE ( extract( year from hire_date ) , 2005 , 1 , 0 )) AS "Y2005"
+            , SUM ( DECODE ( extract( year from hire_date ) , 2006 , 1 , 0 )) AS "Y2006"
+             , SUM ( DECODE ( extract( year from hire_date ) , 2007 , 1 , 0 )) AS "Y2007"
+              , SUM ( DECODE ( extract( year from hire_date ) , 2008 , 1 , 0 )) AS "Y2008"
+from employees 
+where extract ( year from hire_date ) between 2001 and 2008
+group by func_gender(jubun) 
+order by 1 ;
+
+
 
 desc employees; 
+
+-- 특정부서명에 근무하는 직원들에 대해서 성별에 따른 인원수 및 퍼센티지 알아오기 --
+select func_gender(jubun) AS gender ,
+        count (*) as count , 
+         round (count(*)/(select count(*) from employees )*100 , 2 ) as percent  
+from employees E left join departments D
+ON E.department_id = D.department_id 
+where D.department_name = ''
+group by  func_gender(jubun)
+
+

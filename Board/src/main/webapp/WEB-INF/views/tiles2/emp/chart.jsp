@@ -1,11 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <% String ctxPath = request.getContextPath(); %>
-<script src="<%=ctxPath%>/resources/Highcharts-10.3.1/code/highcharts.js"></script>
-<script src="<%=ctxPath%>/resources/Highcharts-10.3.1/code/modules/exporting.js"></script>
-<script src="<%=ctxPath%>/resources/Highcharts-10.3.1/code/modules/export-data.js"></script>
-<script src="<%=ctxPath%>/resources/Highcharts-10.3.1/code/modules/accessibility.js"></script>
-<script src="<%=ctxPath%>/resources/Highcharts-10.3.1/code/modules/series-label.js"></script>
+<script src="<%=ctxPath%>/resources/Highcharts-11.0.1/code/highcharts.js"></script>
+<script src="<%=ctxPath%>/resources/Highcharts-11.0.1/code/modules/exporting.js"></script>
+<script src="<%=ctxPath%>/resources/Highcharts-11.0.1/code/modules/export-data.js"></script>
+<script src="<%=ctxPath%>/resources/Highcharts-11.0.1/code/modules/accessibility.js"></script>
+<script src="<%=ctxPath%>/resources/Highcharts-11.0.1/code/modules/series-label.js"></script>
+
+<script src="<%=ctxPath%>/resources/Highcharts-11.0.1/code/modules/data.js"></script>
+<script src="<%=ctxPath%>/resources/Highcharts-11.0.1/code/modules/drilldown.js"></script>
 
 <style type="text/css">
 .highcharts-figure,
@@ -314,6 +317,100 @@ div#table_container table {width: 100%}
 			
 			
 			case "deptnameGender": // 부서별 성별 인원통계 선택한 경우
+				
+				$.ajax({
+					url:"<%=ctxPath%>/chart/employeeCntByDeptname.action",	
+					dataType:"json",
+					success:function(json){
+						let deptnameArr = []; // 부서명별 인원수 퍼센티지 객체 배열
+						$.each(json, function(index, item){
+							deptnameArr.push({name: item.department_name ,
+			                    y: Number(item.percent),
+			                    drilldown: item.department_name});
+						});
+						
+						let genderArr = []; // 특정 부서명에 근무하는 직원들의 성별 인원수 퍼센티지 객체 배열 
+						
+						
+						$.each(json , function(index,item){
+							$.ajax({
+								url:"<%=ctxPath%>/chart/genderCntSpecialDeptname.action",
+								data: {"deptname" : item.department_name }
+							});
+							
+						});
+						
+						////////////////////////////////////////////////////////////////////////////////////////////////////////
+						// Create the chart
+						Highcharts.chart('chart_container', {
+						    chart: {
+						        type: 'column'
+						    },
+						    title: {
+						        align: 'left',
+						        text: '부서별 남녀 비율'
+						    },
+						    subtitle: {
+						        align: 'left',
+						        text: 'Source: <a href="http://localhost:9090/board/emp/empList.action" target="_blank">HR.employees</a>'
+						    },
+						    accessibility: {
+						        announceNewData: {
+						            enabled: true
+						        }
+						    },
+						    xAxis: {
+						        type: 'category'
+						    },
+						    yAxis: {
+						        title: {
+						            text: '구성비율'
+						        }
+
+						    },
+						    legend: {
+						        enabled: false
+						    },
+						    plotOptions: {
+						        series: {
+						            borderWidth: 0,
+						            dataLabels: {
+						                enabled: true,
+						                format: '{point.y:.1f}%'
+						            }
+						        }
+						    },
+
+						    tooltip: {
+						        headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+						        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
+						    },
+
+						    series: [
+						        {
+						            name: '부서명',
+						            colorByPoint: true,
+						            data:  deptnameArr 
+						         // **** 위에서 구한 값을 대입시킴. 부서명별 인원수 퍼센티지 객체 배열  ****
+						        }
+						    ],
+						    drilldown: {
+						        breadcrumbs: {
+						            position: {
+						                align: 'right'
+						            }
+						        },
+						        series:  genderArr  // **** 위에서 구한 값을 대입시킴. 특정 부서명에 근무하는 직원들의 성별 인원수 퍼센티지 객체 배열  ****
+						    }
+						});
+						///////////////////////////////////////////////////////////////////////////////////////////////////
+					},
+					error: function(request, status, error){
+		                  alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+					}
+				
+				});
+				
 				break;
 			
 			default:

@@ -79,6 +79,7 @@
 		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 		           <a class="dropdown-item" href="<%=ctxPath%>/emp/empList.action">직원목록</a>
 		           <a class="dropdown-item" href="<%=ctxPath%>/emp/chart.action">통계차트</a>
+		           <a class="dropdown-item" href="<%=ctxPath%>/emp/geocoder.action">주소를위경도변경</a>
 		        </div>
 		     </li>
 		     

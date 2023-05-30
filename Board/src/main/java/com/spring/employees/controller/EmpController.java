@@ -43,6 +43,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.spring.board.model.MemberVO;
 import com.spring.employees.service.InterEmpService;
 
 @Controller
@@ -558,31 +559,50 @@ public class EmpController {
 			
 			return new Gson().toJson(jsonArr);
 		}
-
+		
+		
 		// === #180. 차트그리기(Ajax) 성별별 입사년도별 인원수 가져오기 === // 
 		@ResponseBody
 		@RequestMapping(value="/chart/employeeCntByGenderHireYear.action" ,  produces="text/plain;charset=UTF-8")
 		public String employeeCntByGenderHireYear(HttpServletRequest request) {
 			List<Map<String,String>> mapList = service.employeeCntByGenderHireYear();
-
-			JsonArray jsonArr = new JsonArray() ;
-			if ( mapList != null && mapList.size() > 0 ) {
-				 for ( Map<String,String> map : mapList) {
-					 JsonObject json = new JsonObject() ;
-					 json.addProperty("gender", map.get("gender"));
-					 json.addProperty("Y2001", map.get("Y2001"));
-					 json.addProperty("Y2002", map.get("Y2002"));
-					 json.addProperty("Y2003", map.get("Y2003"));
-					 json.addProperty("Y2004", map.get("Y2004"));
-					 json.addProperty("Y2005", map.get("Y2005"));
-					 json.addProperty("Y2006", map.get("Y2006"));
-					 json.addProperty("Y2007", map.get("Y2007"));
-					 json.addProperty("Y2008", map.get("Y2008"));
-					 
-					 jsonArr.add(json);
-				 } // end of for 문 
-			}
 			
-			return new Gson().toJson(jsonArr);
+			Gson gson = new Gson();
+			String result = gson.toJson(mapList);
+//			MemberVO member = new MemberVO();
+//			String memberInfo = gson.toJson(member);
+//			
+//			
+//			MemberVO member2  = gson.fromJson(memberInfo, MemberVO.class);
+//			JsonArray jsonArray = (JsonArray) gson.toJsonTree(mapList);
+			
+//			JsonArray jsonArr = new JsonArray() ;
+//			if ( mapList != null && mapList.size() > 0 ) {
+//				 for ( Map<String,String> map : mapList) {
+//					 
+//					 JsonObject json = new JsonObject() ;
+//					 json.addProperty("gender", map.get("gender"));
+//					 json.addProperty("Y2001", map.get("Y2001"));
+//					 json.addProperty("Y2002", map.get("Y2002"));
+//					 json.addProperty("Y2003", map.get("Y2003"));
+//					 json.addProperty("Y2004", map.get("Y2004"));
+//					 json.addProperty("Y2005", map.get("Y2005"));
+//					 json.addProperty("Y2006", map.get("Y2006"));
+//					 json.addProperty("Y2007", map.get("Y2007"));
+//					 json.addProperty("Y2008", map.get("Y2008"));
+//					 
+//					 jsonArr.add(json);
+//				 } // end of for 문 
+//			}
+			
+			return result; // new Gson().toJson(jsonArr);
 		}
+		
+		// === 주소를 위도/경도로 변환하기 === // 
+		   @RequestMapping(value="/emp/geocoder.action", produces="text/plain;charset=UTF-8") 
+		   public String geocoding(HttpServletRequest request) {
+		            
+		      return "emp/geocoder.tiles2";
+		   }
+		   
 }
