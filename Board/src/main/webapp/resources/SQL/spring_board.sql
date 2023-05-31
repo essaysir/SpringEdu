@@ -763,7 +763,8 @@ select func_gender(jubun) AS gender ,
          round (count(*)/(select count(*) from employees )*100 , 2 ) as percent  
 from employees E left join departments D
 ON E.department_id = D.department_id 
-where D.department_name = ''
+where D.department_name = 'IT'
 group by  func_gender(jubun)
+order by gender ; 
 
 

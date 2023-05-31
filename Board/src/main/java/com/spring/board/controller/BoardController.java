@@ -19,14 +19,18 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
 import com.spring.board.common.FileManager;
+import com.spring.board.common.GoogleMail;
 import com.spring.board.common.MyUtil;
 import com.spring.board.common.Sha256;
 import com.spring.board.model.BoardVO;
@@ -116,8 +120,14 @@ public class BoardController {
 		// === #155. 파일업로드 및 다운로드를 해주는 FileManager 클래스 의존객체 주입하기(DI : Dependency Injection) ===  
 	   @Autowired     // Type에 따라 알아서 Bean 을 주입해준다.
 	   private FileManager fileManager;
-	
-	
+	   
+	   private final GoogleMail mail;
+	   
+	   @Autowired
+	   public BoardController(GoogleMail mail) {
+		   this.mail = mail ;
+	   }
+	   
 	// ==== **** Spring 기초 시작 **** ==== //
 	@RequestMapping(value = "/test/test_insert.action")
 	public String test_insert(HttpServletRequest request) {
@@ -1688,7 +1698,107 @@ public class BoardController {
 		    //  /WEB-INF/views/tiles1/email/emailWrite.jsp 페이지를 만들어야 한다.
 		}
 		
+		@ResponseBody
+		@PostMapping(value="/emailWrite.action")
+		public String emailWrite(MultipartHttpServletRequest mtrequest , HttpServletResponse response
+				, @RequestParam Map<String,Object> paraMap)  {
+			List<MultipartFile> fileList = mtrequest.getFiles("file_arr");
+			// MultipartFile interface는 Spring에서 업로드된 파일을 다룰 때 사용되는 인터페이스로 파일의 이름과 실제 데이터, 파일 크기 등을 구할 수 있다.
+			
+			/*
+	         >>>> 첨부파일이 업로드 되어질 특정 경로(폴더)지정해주기
+	                    우리는 WAS 의 webapp/resources/email_attach_file 라는 폴더로 지정해준다.
+	      */
+	      // WAS 의 webapp 의 절대경로를 알아와야 한다.
+	      HttpSession session = mtrequest.getSession();
+	      String root = session.getServletContext().getRealPath("/");
+	      String path = root + "resources"+File.separator+"email_attach_file";
+	      // path 가 첨부파일들을 저장할 WAS(톰캣)의 폴더가 된다.
+	      
+	        System.out.println("~~~~ 확인용 path => " + path);
+	        // ~~~~ 확인용  webapp 의 절대경로 => C:\NCS\workspace(spring)\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\Board\resources\email_attach_file
+			
+	        File dir = new File(path);
+	        if (!dir.exists()) {
+	        	dir.mkdirs();
+	        }
+	        
+	        /// >>>> 첨부파일의 경로 올리기 <<<< //
+	        String[] arr_attachFilename = null ; 
+	        if ( fileList != null && fileList.size() > 0 ) {
+	        	arr_attachFilename = new String[fileList.size()];
+	        	
+	        	for ( int i=0 ; i<fileList.size() ; i++ ) {
+	        		MultipartFile mtfile = fileList.get(i);
+	        		// System.out.println(" 파일명 : " + mtfile.getOriginalFilename() + "/ 파일크기 : " + mtfile.getSize());
+	        		// 파일명 : 제품7 (1).jpg/ 파일크기 : 37109
+	        		//파일명 : d7470011-cea3-4d0c-a306-38a445e9d0ee_개발할_결심.pdf/ 파일크기 : 854034
+	        		// 파일명 : 284c309a-77c4-4886-8447-d5c7cf4d0fd9_개발할_결심.pdf/ 파일크기 : 854302
+	        		
+	        		// MultipartFile 을 File 로 변환하여 탐색기 저장폴더에 저장하기 시작
+	        			try {
+	        				File attachFile = new File(path + File.separator+ mtfile.getOriginalFilename());
+							mtfile.transferTo(attachFile);
+							arr_attachFilename[i] = mtfile.getOriginalFilename() ;
+							
+							
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+	        			
+	        		// MultipartFile 을 File 로 변환하여 탐색기 저장폴더에 저장하기 끝	        		
+	        	} // end of for 문 
+	        	
+	        }
+	         System.out.println("recipient : " + paraMap.get("recipient"));
+	        // recipient : sonjs4@naver.com;sonjs4755@gekm.adc
+
+	         System.out.println("subject : " + paraMap.get("subject"));
+	        // subject : 첨부파일이 있는메일 연습 보내기
+
+	         System.out.println("content: " + paraMap.get("content"));
+	        // content: 첨부파일이 있는메일 연습 보내기첨부파일이 있는메일 연습 보내기
+
+	         JSONObject jsonobj = new JSONObject();
+	        String[] arr_recipient = ((String)paraMap.get("recipient")).split("\\;");
+	         for ( String recipient_email : arr_recipient ) {
+	        	 paraMap.put("recipient_email", recipient_email);
+	        	 
+	        	 if ( fileList != null && fileList.size() > 0 ) {
+	        		 paraMap.put("path", path); 
+	        		 paraMap.put("arr_attachFilename", arr_attachFilename );
+	        	 }
+	        	 try {
+	        	 mail.sendmail_withFile(paraMap);
+	        	 jsonobj.put("result", 1 ) ;
+	        	 }catch(Exception e) {
+	        		 e.printStackTrace();
+	        		 jsonobj.put("resutl", 0);
+	        	 }
+	        	 
+	         }// end of for 문 
+	      // 메일 전송 후 업로드한 첨부파일 지우기
+	         if(arr_attachFilename != null) {
+	            for(String attachFilename : arr_attachFilename) {
+	               try {
+	                  fileManager.doFileDelete(attachFilename, path);
+	               } catch (Exception e) {
+	                  e.printStackTrace();
+	               }
+	            }
+	         }
+	         
+	         System.out.println(jsonobj.toString());
+	         
+	         return jsonobj.toString();
+		}
+		
 		// === 다중 파일 첨부가 되는 이메일 보내기 끝 === // 
 		
+		@GetMapping(value="/emailWrite_done.action")
+		public String emailWrite_done() {
+			
+			return "email/emailWrite_done.tiles1";
+		}
 		
 } // end of BoardController 

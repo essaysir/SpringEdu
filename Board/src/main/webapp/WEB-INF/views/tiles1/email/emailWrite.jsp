@@ -153,7 +153,169 @@
 	  			$(this).css("background-colro" , "#fff") ; 
 	  		});
 	  		
-	  		
+	  		// === drop 되어진 파일목록 제거하기 === //
+	  		$(document).on('click', 'span.delete' , function(e){
+	  			let idx = $("span.delete").index($(e.target));
+	  			// alert (" 인덱스 : " + idx );
+	  			// console.log('배열에서 파일을 제거하기 전 => ' + file_arr) ;
+	  			file_arr.splice(idx,1);
+	  			// console.log(file_arr);
+	  			<%-- 
+                배열명.splice() : 배열의 특정 위치에 배열 요소를 추가하거나 삭제하는데 사용한다. 
+                                         삭제할 경우 리턴값은 삭제한 배열 요소이다. 삭제한 요소가 없으면 빈 배열( [] )을 반환한다.
+    
+            배열명.splice(start, 0, element);  // 배열의 특정 위치에 배열 요소를 추가하는 경우 
+                    start   - 수정할 배열 요소의 인덱스
+                       0       - 요소를 추가할 경우
+                       element - 배열에 추가될 요소
+           
+                    배열명.splice(start, deleteCount); // 배열의 특정 위치의 배열 요소를 삭제하는 경우    
+                       start   - 수정할 배열 요소의 인덱스
+                       deleteCount - 삭제할 요소 개수
+  				  --%>
+                   $(e.target).parent().remove(); 
+	  			
+	  		});
+	  	  
+	  	  // 보내기 버튼
+	         $("button#btnWrite").click(function(){
+	            
+	         <%-- == 스마트 에디터 구현 시작 ==--%>
+	            // id 가 content 인 textarea 에 에디터 대입
+	         <%-- == 스마트 에디터 구현 끝 ==--%>
+	         
+	           // 받는 사람 유효성 검사
+	               const recipient = $("input#recipient").val().trim();
+	               if(recipient == "") {
+	                  alert("받는 사람 이메일 주소를 입력하세요!!");
+	                  return;
+	               }
+	               
+	          // 제목 유효성 검사
+	               const subject = $("input#subject").val().trim();
+	               if(subject == "") {
+	                  alert("이메일 제목을 입력하세요!!");
+	                  return;
+	               }
+	                           
+	           <%-- ==== 글내용 유효성 검사(스마트 에디터 사용 할 경우) 시작 ==== --%>
+	               let content = $("textarea#content").val();
+	               
+	               // 글내용 유효성 검사하기
+	               // alert(content); // content에 공백만 여러개를 입력하여 쓰기를 할 경우 알아본 것.
+	               /*
+	                 <p>&nbsp;</p>
+	                 <p>&nbsp; &nbsp; &nbsp; &nbsp;</p>
+	               */
+	               
+	               content = content.replace(/&nbsp;/gi, ""); 
+	                                        // &nbsp; 를 "" 으로 변환한다.
+	                                        /*    
+	                                                대상문자열.replace(/찾을 문자열/gi, "변경할 문자열");
+	                                            ==> 여기서 꼭 알아야 될 점은 나누기(/)표시안에 넣는 찾을 문자열에는 "" 는 없어야 한다는 점입니다. 
+	                                                         그리고 뒤의 gi는 다음을 의미합니다.
+	                                       
+	                                            g : 전체 모든 문자열을 변경 global
+	                                            i : 영문 대소문자를 무시, 모두 일치하는 패턴 검색 ignore
+	                                      */ 
+	            //alert(content);                                                             
+	            /*
+	            <p></p>
+	            <p>                </p>
+	            */                                        
+	            content = content.substring(content.indexOf("<p>") + 3); //                 </p>
+	            content = content.substring(0, content.indexOf("</p>"));
+	            
+
+	               
+	          <%-- ==== 글내용 유효성 검사(스마트 에디터 사용 할 경우) 끝 ==== --%>
+	          
+	              // ajax 를 사용하여 파일 전송하는 2가지 방법
+	              // 첫번째 ==> ajaxForm 을 사용하는 것 (tiles1/view.jsp 참조)
+	              // 두번째 ==> FormData 를 사용하는 것 (tiles2/empList.jsp 참조)
+	          
+	                
+	          /* 
+	            FormData 객체는 ajax 로 폼 전송을 가능하게 해주는 자바스크립트 객체이다.
+	                    즉, FormData란 HTML5 의 <form> 태그를 대신 할 수 있는 자바스크립트 객체로서,
+	                   자바스크립트 단에서 ajax 를 사용하여 폼 데이터를 다루는 객체라고 보면 된다. 
+	            FormData 객체가 필요하는 경우는 ajax로 파일을 업로드할 때 필요하다.
+	          */ 
+	       
+	          /*
+	             === FormData 의 사용방법 2가지 ===
+	             <form id="myform">
+	                <input type="text" id="title" name="title" />
+	                <input type="file" id="imgFile" name="imgFile" />
+	             </form>
+	                  
+	                    첫번째 방법, 폼에 작성된 전체 데이터 보내기   
+	             var formData = new FormData($("form#myform").get(0));  // 폼에 작성된 모든것
+	             
+	                     또는
+	             var formData = new FormData($("form#myform")[0]);  // 폼에 작성된 모든것
+	             // jQuery선택자.get(0) 은 jQuery 선택자인 jQuery Object 를 DOM(Document Object Model) element 로 바꿔주는 것이다. 
+	            // DOM element 로 바꿔주어야 순수한 javascript 문법과 명령어를 사용할 수 있게 된다. 
+	          
+	         // 또는
+	             var formData = new FormData(document.getElementById('myform'));  // 폼에 작성된 모든것
+	           
+	                    두번째 방법, 폼에 작성된 것 중 필요한 것만 선택하여 데이터 보내기 
+	             var formData = new FormData();
+	          // formData.append("key", value값);
+	             formData.append("title", $("input#title").val());
+	             formData.append("imgFile", $("input#imgFile")[0].files[0]);
+	         */  
+	                  
+	              // var formData = new FormData($("form#addFrm").get(0));  // $("form#addFrm") 폼에 작성된 모든 데이터 보내기
+	              // 또는
+	              var formData = new FormData($("form[name='addFrm']").get(0));  // $("form#addFrm") 폼에 작성된 모든 데이터 보내기
+	              
+	              if(file_arr.length > 0){// 파일 첨부가 있을 경우
+	                 
+	                 // 첨부한 파일의 총합의 크기가 10MB 이상이라면 메일 전송을 못하게 막는다.
+	                 let sum_file_size = 0;
+	                  
+	                   for(let i=0; i<file_arr.length;i++){
+	                     sum_file_size += file_arr[i].size;
+	                   } // end of for -------------------------------------------
+	                   
+	                   if(sum_file_size >= 10*1024*1024){ // 첨부한 파일의 총합의 크기가 10MB 이상이라면
+	                      alert("첨부한 파일의 총합의 크기가 10MB 이상이라서 파일을 업로드 할 수 없습니다.");
+	                        return; // 종료
+	                   }
+	                   else{ // formData 속에 첨부파일을 넣어주기 
+	                      file_arr.forEach(function(item){
+	                         formData.append("file_arr", item); // 첨부파일을 추가하기
+	                      });                            // 같은 key를 가진 값을 여러 개 넣을 수 있다.(덮어씌워지지 않고 추가가 된다.)
+	                   }
+	                 
+	              }// end of if(file_arr.length > 0) ----------------------------
+	              
+	              $("div.loader").show();// CSS 로딩화면 보여주기
+	                       
+		          		$.ajax({
+						url : "<%=ctxPath%>/emailWrite.action",
+	                    type : "post",
+	                    data : formData,
+	                    processData:false,  // 파일 전송시 설정 
+	                    contentType:false,  // 파일 전송시 설정 
+	                    dataType:"json",
+	                    success:function(json){
+	                       if(json.result == 1) {
+	                       		location.href="<%=ctxPath%>/emailWrite_done.action" 
+	                       }
+	                        else {
+	                           alert("메일 보내기가 실패했습니다.ㅜㅜ");
+	                        }
+	                    },
+	                    error: function(request, status, error){
+	                    alert("code: "+request.status+"\n"+"message: "+request.responseText+"\n"+"error: "+error);
+	                    }	
+					
+						}); // end of ajax 	
+		         	
+	     	});
 	  	
 	  	<%-- === jQuery 를 사용하여 드래그앤드롭(DragAndDrop)을 통한 파일 업로드 끝 === --%>
 		  	
@@ -173,7 +335,7 @@
    
    	<h2 style="margin-bottom: 30px;">e메일 쓰기</h2>
      
-<form name="addFrm" enctype="multipart/form-data">
+<form name="addFrm" id="addFrm" enctype="multipart/form-data">
    
    <div class="my-3">
       <button type="button" class="btn btn-success mr-3" id="btnWrite">보내기</button>
