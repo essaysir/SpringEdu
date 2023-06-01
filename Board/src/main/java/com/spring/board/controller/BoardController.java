@@ -1801,4 +1801,19 @@ public class BoardController {
 			return "email/emailWrite_done.tiles1";
 		}
 		
+		// === #182. Spring Scheduler(스프링스케줄러2)를 사용하여 특정 URL 사이트로 연결하기 === //
+		   @RequestMapping(value="/branchTimeAlarm.action")
+		   public ModelAndView branchTimeAlarm(ModelAndView mav, HttpServletRequest request) {
+		      
+		      String message = "12시 50분!! 즐거운 점심시간 입니다.";
+		      String loc = request.getContextPath()+"/index.action";
+		      
+		      mav.addObject("message", message);
+		      mav.addObject("loc", loc);
+		      
+		      mav.setViewName("msg");
+		      
+		      return mav;
+		   }
+		
 } // end of BoardController 

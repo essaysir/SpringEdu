@@ -62,6 +62,10 @@ public interface InterBoardDAO {
 		int getGroupno_max();  // tbl_board 테이블에서 groupno 컬럼의 최대값 알아오기 
 
 		int add_withFile(BoardVO boardvo); // 글쓰기 파일첨부가 있는 경우 
+
+		List<Map<String, String>> getReservationList(); // === Spring Scheduler(스프링스케줄러)를 사용한 email 발송하기 ===  
+
+		void updateMailSendCheck(Map<String, String[]> paraMap); // e메일을 발송한 행은 발송했다는 표시해주기 
 		
 		
 		

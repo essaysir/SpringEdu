@@ -21,6 +21,7 @@
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
 	<mvc:resources mapping="/resources/**" location="/resources/" />
 
+	
 	<!-- === #19. 엑셀파일다운로드를 위해  BeanNameViewResolver 추가하기 === -->
     <!-- 스프링 프레임워크(Spring Framework)에서 JSP가 아닌 컨트롤러를 호출하여 파일을 다운로드 하려면 다음과 같은 단계를 거쳐야 한다. 
         BeanNameViewResolver 뷰 리졸버를 추가한 후 파일 다운로드를 처리해줄 빈을 등록한다.
@@ -151,6 +152,9 @@
 	<!-- ==== #18. bean으로 등록될 @Component 클래스가 위치하는 패키지명 지정하기 ====  -->
 	<!-- <context:component-scan base-package="com.spring.board" /> -->
 	<context:component-scan base-package="com.spring.*"  name-generator="com.spring.board.common.FullBeanNameGenerator"/>
+	
+	<!-- ==== #181. Spring Scheduler(스프링스케줄러1) 어노테이션을 사용하여 스프링스케줄러를 구현하도록 한다. ==== -->
+   <task:annotation-driven/>
 	
 	<!-- 앞으로 생성할 모든 컨트롤러, 서비스단, Aspect 등  모든 클래스들(*.java)은
             항상 com.test.* 패키지 안에서 생성되어져야만 스프링컨테이너에 의해 스캔되어 자동적으로 bean 으로 등록되어진다.

@@ -87,7 +87,11 @@ public interface InterBoardService {
 	int add_withFile(BoardVO boardvo);
 
 
+	// === #183. Spring Scheduler(스프링스케줄러3) === //
+	   
+	   // === Spring Scheduler 를 사용하여 특정 URL 사이트로 연결하기 === 
+	   // !!<주의>!! 스프링스케줄러로 사용되는 메소드는 반드시 파라미터가 없어야 한다.!!!!!!!!!!
+	   void branchTimeAlarm();
 	
-	
-
+	   void reservationEmailSending() throws Exception;
 }

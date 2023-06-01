@@ -441,7 +441,31 @@
                 , #{pw} , default , default , default, #{groupno}, default, default , #{fileName} , #{orgFilename} , #{fileSize})
 	    	</insert>
 	    	
-	    	
+	    	<!-- === #190. Spring Scheduler(스프링스케줄러10) === -->
+		   <!-- === Spring Scheduler(스프링스케줄러)를 사용한 email 발송하기 === -->
+		   <resultMap type="HashMap" id="getReservationListMap">
+		       <result property="RESERVATIONSEQ"    column="reservationSeq"     javaType="String" />
+		       <result property="USERID"          column="userid"           javaType="String" />
+		       <result property="NAME"          column="name"              javaType="String" />
+		       <result property="EMAIL"          column="email"           javaType="String" />
+		       <result property="RESERVATIONDATE"    column="reservationDate"     javaType="String" />
+		    </resultMap>
+		   <select id="getReservationList" resultMap="getReservationListMap">
+		      select R.reservationSeq, M.userid, M.name, M.email, 
+		             to_char(R.reservationDate,'yyyy-mm-dd hh24:mi') as reservationDate
+		      from tbl_member M join tbl_reservation R
+		      on M.userid = R.fk_userid
+		      where R.mailSendCheck = 0
+		      and to_char(reservationDate, 'yyyy-mm-dd') = to_char(sysdate+2, 'yyyy-mm-dd')
+		   </select>
+		   
+		   <update id="updateMailSendCheck" parameterType="HashMap">
+      update tbl_reservation set mailSendCheck = 1 
+       where reservationSeq in 
+       <foreach collection="arr_reservationSeq" index="i" open="(" separator="," close=")">
+         ${arr_reservationSeq[i]}
+      </foreach>
+   </update>
 	    	
 	    	
 	    	
