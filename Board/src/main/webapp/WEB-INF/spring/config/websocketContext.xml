@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- // === #197. (웹채팅관련7) === // -->
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xsi:schemaLocation="http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    
+    <beans:bean id="echoHandler" class="com.spring.chatting.websockethandler.WebsocketEchoHandler" init-method="init" />
+    <websocket:handlers>
+        <websocket:mapping path="/chatting/multichatstart.action" handler="echoHandler" />
+        
+        <!-- websocket:handlers 태그안에서 아래처럼 websocket:handshake-interceptors에
+             HttpSessionHandshakeInterceptor를 추가해주면
+             WebSocketHandler에 접근하기 전에 
+                       먼저 HttpSession에 접근하여 HttpSession에 저장된 값을 읽어 들여 WebSocketHandler에서 사용할 수 있도록 처리해줌. -->
+        <websocket:handshake-interceptors>
+   			<beans:bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor" />
+    	</websocket:handshake-interceptors>
+    </websocket:handlers>
+    
+</beans:beans>

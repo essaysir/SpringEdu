@@ -925,16 +925,16 @@ select to_char(sysdate, 'yyyy-mm-dd') AS 오늘날짜
 from dual; -- 2023-06-01
 
 insert into tbl_reservation(reservationSeq, fk_userid, reservationDate)
-values(seq_reservation.nextval, 'sonjs4', to_date('2022-05-12 13:00','yyyy-mm-dd hh24:mi') );
+values(seq_reservation.nextval, 'sonjs4', to_date('2023-06-03 13:00','yyyy-mm-dd hh24:mi') );
 
 insert into tbl_reservation(reservationSeq, fk_userid, reservationDate)
-values(seq_reservation.nextval, 'leess', to_date('2022-05-12 14:00','yyyy-mm-dd hh24:mi') );
+values(seq_reservation.nextval, 'leess', to_date('2023-06-03 14:00','yyyy-mm-dd hh24:mi') );
 
 insert into tbl_reservation(reservationSeq, fk_userid, reservationDate)
-values(seq_reservation.nextval, 'sonjs4', to_date('2022-05-13 11:00','yyyy-mm-dd hh24:mi') );
+values(seq_reservation.nextval, 'sonjs4', to_date('2023-06-04 11:00','yyyy-mm-dd hh24:mi') );
 
 insert into tbl_reservation(reservationSeq, fk_userid, reservationDate)
-values(seq_reservation.nextval, 'leess', to_date('2022-05-13 15:00','yyyy-mm-dd hh24:mi') );
+values(seq_reservation.nextval, 'leess', to_date('2023-06-04 15:00','yyyy-mm-dd hh24:mi') );
 
 commit;
 

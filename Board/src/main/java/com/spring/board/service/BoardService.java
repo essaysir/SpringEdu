@@ -103,9 +103,12 @@ public class BoardService  implements InterBoardService {
 	@Override
 	public ModelAndView loginEnd(ModelAndView mav, HttpServletRequest request , Map<String, String> paraMap) {
 		MemberVO loginuser = dao.getLoginMember(paraMap);
+		System.out.println(loginuser);
 		// === #48. aes 의존객체를 사용하여 로그인 되어진 사용자(loginuser)의 이메일 값을 복호화 하도록 한다. === 
 	    //          또한 암호변경 메시지와 휴면처리 유무 메시지를 띄우도록 업무처리를 하도록 한다.
-			
+		HttpSession session = request.getSession();
+		session.setAttribute("loginuser", loginuser);
+		
 		if ( loginuser != null &&  loginuser.getPwdchangegap() >= 3) {
 			// 마지막으로 암호를 변경한 날짜가 현재시각으로 부터 3개월이 지났으면 
 			loginuser.setRequirePwdChange(true); // 로그인시 암호를 변경해라는 alert 를 띄우도록 한다.
@@ -148,9 +151,9 @@ public class BoardService  implements InterBoardService {
 					mav.setViewName("msg");
 			}
 			else { // 로그인 한지 1년 이내인 경우
-				HttpSession session = request.getSession(); 
+				session = request.getSession(); 
 				// 메모리에 생성되어져 있는 session 을 불러오는 것이다 . 
-				session.setAttribute("loginuser", loginuser);
+				session.setAttribute("loginuser", loginuser );
 				// session(세션)에 로그인 되어진 사용자 정보인 loginuser 을 키이름을 "loginuser" 으로 저장시켜두는 것이다. 
 				
 				 if ( loginuser.isRequirePwdChange() == true ) { // 암호를 마지막으로 변경한 것이 3개월 경과한 경우

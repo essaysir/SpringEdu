@@ -28,7 +28,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.google.gson.Gson;
 import com.spring.board.common.FileManager;
 import com.spring.board.common.GoogleMail;
 import com.spring.board.common.MyUtil;
@@ -1801,7 +1800,7 @@ public class BoardController {
 			return "email/emailWrite_done.tiles1";
 		}
 		
-		// === #182. Spring Scheduler(스프링스케줄러2)를 사용하여 특정 URL 사이트로 연결하기 === //
+			// === #182. Spring Scheduler(스프링스케줄러2)를 사용하여 특정 URL 사이트로 연결하기 === //
 		   @RequestMapping(value="/branchTimeAlarm.action")
 		   public ModelAndView branchTimeAlarm(ModelAndView mav, HttpServletRequest request) {
 		      
@@ -1816,4 +1815,12 @@ public class BoardController {
 		      return mav;
 		   }
 		
+		   
+		   // === #194.  (웹채팅 관련4) 
+		   @RequestMapping(value="/chatting/multichat.action" , method=RequestMethod.GET)
+		   public String requiredLogin_multichat(HttpServletRequest request , HttpServletResponse response) {
+			 
+			   return "chatting/multichat.tiles1";
+		   }
+		   
 } // end of BoardController 

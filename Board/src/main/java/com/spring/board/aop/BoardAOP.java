@@ -54,9 +54,10 @@ public class BoardAOP {
 				// 로그인 유무를 확인하기 위해서는 request 를  통해 session 을 얻어와야 한다.
 				HttpServletRequest request = (HttpServletRequest)joinpoint.getArgs()[0]; 		
 				HttpServletResponse response = (HttpServletResponse)joinpoint.getArgs()[1]; 		
-				
+			
 				//  주업무에 들어있는 파라미터 ( = 주업무 메소드의 파라미터 )  중 첫번째 를  말하는 것이다.
 				HttpSession session =  request.getSession();
+				// System.out.println(session.getAttribute("loginuser"));
 				if ( session.getAttribute("loginuser") == null ) {
 					String message = " 먼저 로그인 하세요 !! ";
 					String loc = request.getContextPath()+"/login.action" ;
