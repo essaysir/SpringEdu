@@ -65,7 +65,7 @@
 		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 		           <c:if test="${empty sessionScope.loginuser}">
 			           <a class="dropdown-item" href="#">회원가입</a>
-			           <a class="dropdown-item" href="<%=ctxPath%>/login/">로그인</a>
+			           <a class="dropdown-item" href="<%=ctxPath%>/login.action">로그인</a>
 		           </c:if>
 		           				
 				   <c:if test="${not empty sessionScope.loginuser}">

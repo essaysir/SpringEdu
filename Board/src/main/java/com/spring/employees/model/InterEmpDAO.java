@@ -19,4 +19,6 @@ public interface InterEmpDAO {
 
 	List<Map<String, String>> genderCntSpecialDeptname(String deptname);
 
+	void insert_accessTime(Map<String, String> paraMap); // 인사관리 페이지에 접속한 페이지URL, 사용자ID, 접속IP주소, 접속시간을 기록으로 DB에 insert 하도록 한다. 
+
 }

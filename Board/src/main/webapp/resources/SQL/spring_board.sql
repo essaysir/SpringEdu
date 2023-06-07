@@ -961,7 +961,30 @@ and to_char(reservationDate, 'yyyy-mm-dd') = to_char(sysdate+2, 'yyyy-mm-dd');
 
 
 
+-- *** Arround Advice 를 위해서 만든 테이블임 *** --
+create table tbl_empManger_accessTime
+(seqAccessTime   number
+,pageUrl         varchar2(150) not null
+,fk_userid       varchar2(40) not null
+,clientIP        varchar2(30) not null
+,accessTime      varchar2(20) default sysdate not null
+,constraint PK_tbl_empManger_accessTime primary key(seqAccessTime)
+,constraint FK_tbl_empManger_accessTime foreign key(fk_userid) references tbl_member(userid)
+);
+-- Table TBL_EMPMANGER_ACCESSTIME이(가) 생성되었습니다.
 
+create sequence seq_seqAccessTime
+start with 1
+increment by 1
+nomaxvalue
+nominvalue
+nocycle
+nocache;
+-- Sequence SEQ_SEQACCESSTIME이(가) 생성되었습니다.
+
+select * 
+from tbl_empManger_accessTime
+order by seqAccessTime desc;
 
 
 

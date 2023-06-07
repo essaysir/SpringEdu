@@ -467,7 +467,11 @@
       </foreach>
    </update>
 	    	
-	    	
+	  <!-- === 인사관리 페이지에 접속한 페이지URL, 사용자ID, 접속IP주소, 접속시간을 기록으로 DB에 insert 하도록 한다. === -->
+    <insert id="insert_accessTime" parameterType="HashMap">
+       insert into tbl_empManger_accessTime(seqAccessTime, pageUrl, fk_userid, clientIP, accessTime)
+       values(seq_seqAccessTime.nextval, #{pageUrl}, #{fk_userid}, #{clientIp}, #{accessTime})
+    </insert>
 	    	
 	    	
 	    	

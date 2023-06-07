@@ -448,7 +448,7 @@ public class BoardController {
 	}
 
 	// === #40. 로그인 홈페이지 요청 === //
-	@RequestMapping(value = "/login", method = { RequestMethod.GET })
+	@RequestMapping(value = "/login.action", method = { RequestMethod.GET })
 	public ModelAndView login(ModelAndView mav) {
 		mav.setViewName("login/loginform.tiles1");
 //		  		/WEB-INF/views/tiles1/{1}/{2}.jsp 
@@ -1823,4 +1823,42 @@ public class BoardController {
 			   return "chatting/multichat.tiles1";
 		   }
 		   
+		   
+			///////////////////// === 인터셉터 연습 시작 === ///////////////////////////////////////////////
+			@RequestMapping(value="/anyone/anyone_a.action")
+			public String anyone_a() {
+			
+			return "interceptor_test/anyone/anyone_a.tiles1";
+			}
+			
+			@RequestMapping(value="/anyone/anyone_b.action")
+			public String anyone_b() {
+			
+			return "interceptor_test/anyone/anyone_b.tiles1";
+			}
+			
+			@RequestMapping(value="/member_only/member_a.action")
+			public String member_a() {
+			
+			return "interceptor_test/member/member_a.tiles1";
+			}
+			
+			@RequestMapping(value="/member_only/member_b.action")
+			public String member_b() {
+			
+			return "interceptor_test/member/member_b.tiles1";
+			}
+			
+			@RequestMapping(value="/special_member/special_member_a.action")
+			public String special_member_a() {
+			
+			return "interceptor_test/special_member/special_member_a.tiles1";
+			}
+			
+			@RequestMapping(value="/special_member/special_member_b.action")
+			public String special_member_b() {
+			
+			return "interceptor_test/special_member/special_member_b.tiles1";
+			}
+			///////////////////// === 인터셉터 연습 끝 === ///////////////////////////////////////////////
 } // end of BoardController 
