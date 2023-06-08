@@ -223,7 +223,7 @@ $(document).ready(function(){
                    Google Workspace --> Google Calendar API 를 클릭한다.
                    "사용" 버튼을 클릭한다. 
             */
-           googleCalendarApiKey : "AIzaSyAxbiSS4gSH3O-3Jfx8XpB8uE1CIkJGz9o",
+           googleCalendarApiKey : "구글 캘린더 api key 가져와서 넣기",
             eventSources : [ 
                {
                 //  googleCalendarId : '대한민국의 휴일 캘린더 통합 캘린더 ID'
